@@ -1,3 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
+using ProyectoFinal.Data;
+using ProyectoFinal.Repositories;
+using ProyectoFinal.Services;
+
+using DotNetEnv;
+//using Microsoft.AspNetCore.Authentication.JwtBearer;
+//using Microsoft.IdentityModel.Tokens;
+using Npgsql;
+using System.Security.Claims;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+/*
+builder.Services.AddDbContext<AppDbContext>(opt =>
+    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<IViajeRepository, ViajeRepository>();
+builder.Services.AddScoped<IViajeService, ViajeService>();
+¨*/
 
 var app = builder.Build();
 
