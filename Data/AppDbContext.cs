@@ -8,6 +8,7 @@ namespace ProyectoFinal.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Viaje> Viajes => Set<Viaje>();
+        public DbSet<Conductor> Conductores => Set<Conductor>();
 
         public DbSet<Vehiculo> Vehiculos => Set<Vehiculo>();
         public DbSet<Driver> Drivers => Set<Driver>();
@@ -27,13 +28,13 @@ namespace ProyectoFinal.Data
                 entity.Property(v => v.Precio).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(v => v.Estado).IsRequired().HasMaxLength(50);
             });
-            
 
             modelBuilder.Entity<Modelo>(entity =>
             {
                 entity.HasKey(m => m.Id);
                 entity.Property(m => m.Marca).IsRequired().HasMaxLength(100);
                 entity.Property(m => m.Nombre).IsRequired().HasMaxLength(100);
+                entity.Property(m => m.Año).IsRequired();
             });
 
             modelBuilder.Entity<Vehiculo>(entity =>
@@ -43,6 +44,16 @@ namespace ProyectoFinal.Data
                 entity.Property(v => v.Color).IsRequired().HasMaxLength(30);
                 entity.Property(v => v.Estado).IsRequired().HasMaxLength(30);
             });
+
+
+            modelBuilder.Entity<Conductor>(entity =>
+            {
+                entity.HasKey(c => c.Id);
+                entity.Property(c => c.Nombre).IsRequired().HasMaxLength(100);
+                entity.Property(c => c.Licencia).IsRequired().HasMaxLength(50);
+                entity.Property(c => c.Telefono).IsRequired().HasMaxLength(15);
+            });
+
             modelBuilder.Entity<Modelo>()
                 .HasOne(m => m.Vehiculo)
                 .WithOne(v => v.Modelo)
