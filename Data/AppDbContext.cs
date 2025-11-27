@@ -11,8 +11,6 @@ namespace ProyectoFinal.Data
         public DbSet<Conductor> Conductores => Set<Conductor>();
 
         public DbSet<Vehiculo> Vehiculos => Set<Vehiculo>();
-        public DbSet<Driver> Drivers => Set<Driver>();
-        public DbSet<DriverVehiculo> DriverVehiculos => Set<DriverVehiculo>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,7 +21,8 @@ namespace ProyectoFinal.Data
                 entity.HasKey(v => v.Id);
                 entity.Property(v => v.Origen).IsRequired().HasMaxLength(100);
                 entity.Property(v => v.Destino).IsRequired().HasMaxLength(100);
-                entity.Property(v => v.FechaSalida).IsRequired();
+                entity.Property(v => v.FechaFinalizacion).IsRequired();
+                entity.Property(v => v.FechaSolicitud).IsRequired();
                 entity.Property(v => v.Precio).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(v => v.Estado).IsRequired().HasMaxLength(50);
             });

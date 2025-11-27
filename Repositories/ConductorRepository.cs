@@ -21,8 +21,6 @@ namespace ProyectoFinal.Repositories
         public Task<Conductor?> GetByEmailAddress(string email) =>
             _ctx.Conductores.FirstOrDefaultAsync(u => u.Email == email);
 
-        public Task<Conductor?> GetByRefreshToken(string refreshToken) =>
-            _ctx.Conductores.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
         public Task<Conductor?> GetViajesAsync(Guid id) =>
             _ctx.Conductores

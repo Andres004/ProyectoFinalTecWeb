@@ -22,10 +22,7 @@ namespace ProyectoFinal.Services
             var vehiculo = new Vehiculo
             {
                 Id = Guid.NewGuid(),
-                Marca = dto.Marca,
-                Modelo = dto.Modelo,
                 Placa = dto.Placa,
-                Anio = dto.Anio,
                 Estado = "Activo"
             };
 
@@ -49,17 +46,10 @@ namespace ProyectoFinal.Services
             var vehiculo = await _vehiculos.GetVehiculoAsync(id);
             if (vehiculo == null) return false;
 
-            if (!string.IsNullOrWhiteSpace(dto.Marca))
-                vehiculo.Marca = dto.Marca;
-
-            if (!string.IsNullOrWhiteSpace(dto.Modelo))
-                vehiculo.Modelo = dto.Modelo;
 
             if (!string.IsNullOrWhiteSpace(dto.Estado))
                 vehiculo.Estado = dto.Estado;
 
-            if (dto.Anio.HasValue)
-                vehiculo.Anio = dto.Anio.Value;
 
             await _vehiculos.SaveChangesAsync();
             return true;
