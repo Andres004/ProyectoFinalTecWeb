@@ -12,6 +12,7 @@ namespace ProyectoFinal.Data
         public DbSet<Vehiculo> Vehiculos => Set<Vehiculo>();
         public DbSet<Driver> Drivers => Set<Driver>();
         public DbSet<DriverVehiculo> DriverVehiculos => Set<DriverVehiculo>();
+        public DbSet<Modelo> Modelos => Set<Modelo>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,28 +27,26 @@ namespace ProyectoFinal.Data
                 entity.Property(v => v.Precio).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(v => v.Estado).IsRequired().HasMaxLength(50);
             });
+            
+
+            modelBuilder.Entity<Modelo>(entity =>
+            {
+                entity.HasKey(m => m.Id);
+                entity.Property(m => m.Marca).IsRequired().HasMaxLength(100);
+                entity.Property(m => m.Nombre).IsRequired().HasMaxLength(100);
+            });
 
             modelBuilder.Entity<Vehiculo>(entity =>
             {
                 entity.HasKey(v => v.Id);
-                entity.Property(v => v.Marca).IsRequired().HasMaxLength(80);
-                entity.Property(v => v.Modelo).IsRequired().HasMaxLength(80);
-                entity.Property(v => v.Placa).IsRequired().HasMaxLength(15);
-                entity.Property(v => v.Estado).IsRequired().HasMaxLength(20);
+                entity.Property(v => v.Placa).IsRequired().HasMaxLength(20);
+                entity.Property(v => v.Color).IsRequired().HasMaxLength(30);
+                entity.Property(v => v.Estado).IsRequired().HasMaxLength(30);
             });
-
-            modelBuilder.Entity<DriverVehiculo>(entity =>
-            {
-                entity.HasKey(dv => dv.Id);
-
-                entity.HasOne(dv => dv.Driver)
-                      .WithMany(d => d.DriverVehiculos)
-                      .HasForeignKey(dv => dv.DriverId);
-
-                entity.HasOne(dv => dv.Vehiculo)
-                      .WithMany(v => v.DriverVehiculos)
-                      .HasForeignKey(dv => dv.VehiculoId);
-            });
+            modelBuilder.Entity<Modelo>()
+                .HasOne(m => m.Vehiculo)
+                .WithOne(v => v.Modelo)
+                .HasForeignKey<Vehiculo>(v => v.ModeloId);
         }
     }
 }
