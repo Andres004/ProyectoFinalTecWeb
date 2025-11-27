@@ -10,6 +10,10 @@ namespace ProyectoFinal.Data
         public DbSet<Viaje> Viajes => Set<Viaje>();
         public DbSet<Conductor> Conductores => Set<Conductor>();
 
+        public DbSet<Vehiculo> Vehiculos => Set<Vehiculo>();
+        public DbSet<Driver> Drivers => Set<Driver>();
+        public DbSet<DriverVehiculo> DriverVehiculos => Set<DriverVehiculo>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
