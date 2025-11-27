@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProyectoFinal.Models;
 using ProyectoFinal.Models.DTOS;
 using ProyectoFinal.Models.DTOS.ProyectoFinal.Models.DTOS;
 using ProyectoFinal.Services;
@@ -16,6 +17,15 @@ namespace ProyectoFinal.Controllers
             _service = service;
             _viajes = viajes;
         }
+
+        // GET: api/conductor
+        [HttpGet]
+        public async Task<IActionResult> GetAllConductores()
+        {
+            IEnumerable<Conductor> items = await _service.GetAll();
+            return Ok(items);
+        }
+
         // POST: api/conductor
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateConductorDto dto)

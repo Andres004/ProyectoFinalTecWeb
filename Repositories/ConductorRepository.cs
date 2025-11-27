@@ -18,6 +18,11 @@ namespace ProyectoFinal.Repositories
         public Task<bool> ExistsAsync(Guid id) =>
             _ctx.Conductores.AnyAsync(s => s.Id == id);
 
+        public async Task<IEnumerable<Conductor>> GetAll()
+        {
+            return await _ctx.Conductores.ToListAsync();
+        }
+
         public Task<Conductor?> GetByEmailAddress(string email) =>
             _ctx.Conductores.FirstOrDefaultAsync(u => u.Email == email);
 

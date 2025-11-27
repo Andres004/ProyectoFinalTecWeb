@@ -25,6 +25,21 @@ namespace ProyectoFinal.Services
             return entity.Id;
         }
 
+        public Task DeleteConductor(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<Conductor>> GetAll()
+        {
+            return await _conductores.GetAll();
+        }
+
+        public Task<Conductor> GetOne(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<string> RegisterAsync(RegisterConductorDto dto)
         {
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(dto.Password);
@@ -37,5 +52,9 @@ namespace ProyectoFinal.Services
             return conductor.Id.ToString();
         }
 
+        public Task<Conductor> UpdateConductor(UpdateConductorDto dto, Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
