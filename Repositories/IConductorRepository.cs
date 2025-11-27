@@ -14,6 +14,7 @@ namespace ProyectoFinal.Repositories
         Task<int> SaveChangesAsync();
         
         Task<IEnumerable<Conductor>> GetAll();
+        Task<Conductor> GetOne(Guid id);
 
         /*
          Task<IEnumerable<Hospital>> GetAll();

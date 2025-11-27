@@ -26,12 +26,20 @@ namespace ProyectoFinal.Controllers
             return Ok(items);
         }
 
+        // GET: api/conductor/{id}
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetOne(Guid id)
+        {
+            var conductor = await _service.GetOne(id);
+            return Ok(conductor);
+        }
+
         // POST: api/conductor
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateConductorDto dto)
         {
             var id = await _service.CreateAsync(dto);
-            return Created($"api/v1/speakers/{id}", new { id });
+            return Created($"api/conductor/{id}", new { id });
         }
 
         

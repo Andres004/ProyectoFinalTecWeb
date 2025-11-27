@@ -35,9 +35,9 @@ namespace ProyectoFinal.Services
             return await _conductores.GetAll();
         }
 
-        public Task<Conductor> GetOne(Guid id)
+        public async Task<Conductor> GetOne(Guid id)
         {
-            throw new NotImplementedException();
+            return await _conductores.GetOne(id);
         }
 
         public async Task<string> RegisterAsync(RegisterConductorDto dto)

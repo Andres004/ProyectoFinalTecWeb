@@ -26,6 +26,10 @@ namespace ProyectoFinal.Repositories
         public Task<Conductor?> GetByEmailAddress(string email) =>
             _ctx.Conductores.FirstOrDefaultAsync(u => u.Email == email);
 
+        public async Task<Conductor> GetOne(Guid id)
+        {
+            return await _ctx.Conductores.FirstOrDefaultAsync(x => x.Id == id);
+        }
 
         public Task<Conductor?> GetViajesAsync(Guid id) =>
             _ctx.Conductores
