@@ -1,56 +1,24 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using ProyectoFinal.Data;
-using ProyectoFinal.Repositories;
-using ProyectoFinal.Services;
-
-using DotNetEnv;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.IdentityModel.Tokens;
-using Npgsql;
-using System.Security.Claims;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// 1. Add Services to the container
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
-
-
-/*
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddScoped<IViajeRepository, ViajeRepository>();
-builder.Services.AddScoped<IViajeService, ViajeService>();
-¨*/
-
-builder.Services.AddScoped<IViajeRepository, ViajeRepository>();
-builder.Services.AddScoped<IViajeService, ViajeService>();
-
-builder.Services.AddScoped<IVehiculoRepository, VehiculoRepository>();
-builder.Services.AddScoped<IVehiculoService, VehiculoService>();
-
-builder.Services.AddScoped<IConductorRepository, ConductorRepository>();
-builder.Services.AddScoped<IConductorService, ConductorService>();
-
-builder.Services.AddScoped<IPasajeroRepository, PasajeroRepository>();
-builder.Services.AddScoped<IPasajeroService, PasajeroService>();
-
-
+// 2. Configure Database (PostgreSQL)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 3. Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
