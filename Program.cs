@@ -3,22 +3,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-
-// --- AQUÍ ESTÁ EL TRUCO: Creamos un "apodo" para evitar choques ---
-using OpenApi = Microsoft.OpenApi.Models;
-
+using Npgsql;
 using ProyectoFinal.Data;
 using ProyectoFinal.Repositories;
 using ProyectoFinal.Services;
+using OpenApi = Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// --- 1. CONFIGURACIÓN DE SERVICIOS ---
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Configuración de Swagger usando el apodo "OpenApi"
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApi.OpenApiInfo
@@ -28,7 +23,6 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API de Transporte con Autenticación JWT"
     });
 
-    // Configuración del botón "Authorize"
     c.AddSecurityDefinition("Bearer", new OpenApi.OpenApiSecurityScheme
     {
         Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token.",
@@ -57,24 +51,26 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Base de Datos
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Repositorios
+if (string.IsNullOrEmpty(connectionString))
+{
+    connectionString = "Host=localhost;Port=5432;Database=transportedb;Username=transporteuser;Password=supersecretpass";
+}
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
 builder.Services.AddScoped<IPassengerRepository, PassengerRepository>();
 builder.Services.AddScoped<IDriverRepository, DriverRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<ITripRepository, TripRepository>();
 
-// Servicios
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPassengerService, PassengerService>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<ITripService, TripService>();
-
-// --- 2. CONFIGURACIÓN DE SEGURIDAD (JWT) ---
 
 var key = builder.Configuration["Jwt:Key"] ?? "super_secret_key_12345_must_be_long_enough";
 
@@ -93,8 +89,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-
-// --- 3. PIPELINE HTTP ---
 
 app.UseSwagger();
 app.UseSwaggerUI();

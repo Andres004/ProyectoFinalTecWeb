@@ -1,36 +1,40 @@
 services:
   api:
     build: .
-    container_name: security_api
+    container_name: transporte_api
     ports:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__Default=Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      - Jwt__Key=${JWT_KEY}
-      - Jwt__Issuer=${JWT_ISSUER}
-      - Jwt__Audience=${JWT_AUDIENCE}
-      - Jwt__ExpiresMinutes=60
-      - Jwt__RefreshDays=14
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=transportedb
+      - POSTGRES_USER=transporteuser
+      - POSTGRES_PASSWORD=supersecretpass
+      - Jwt__Key=esta_es_una_clave_super_secreta_y_larga_para_seguridad_12345
+      - Jwt__Issuer=TransportApi
+      - Jwt__Audience=TransportClient
     depends_on:
       db:
         condition: service_healthy
+
   db:
     image: postgres:16
-    container_name: security_pg
+    container_name: transporte_pg
     restart: unless-stopped
     environment:
-      POSTGRES_DB: securitydb
-      POSTGRES_USER: securityuser
-      POSTGRES_PASSWORD: supersecret
+      POSTGRES_DB: transportedb
+      POSTGRES_USER: transporteuser
+      POSTGRES_PASSWORD: supersecretpass
     ports:
       - "5432:5432"
     volumes:
-      - security_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U securityuser -d securitydb"]
+      test: ["CMD-SHELL", "pg_isready -U transporteuser -d transportedb"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 5
+
 volumes:
-  security_data:
+  postgres_data:
